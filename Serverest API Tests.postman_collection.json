@@ -1,0 +1,248 @@
+{
+	"info": {
+		"_postman_id": "112482c8-5a92-4bde-bee9-0ef7f4747ef9",
+		"name": "Serverest API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15103612"
+	},
+	"item": [
+		{
+			"name": "Listar usuários cadastrados",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains a list of users\", function () {\r",
+							"  const jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData).to.be.an('object');\r",
+							"  pm.expect(jsonData.quantidade).to.be.above(0);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://serverest.dev/usuarios",
+					"protocol": "https",
+					"host": [
+						"serverest",
+						"dev"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cadastrar um novo usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"userId\", jsonData._id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"Novo Usuario\",\r\n  \"email\": \"usernametest@example.com\",\r\n  \"password\": \"senha123\",\r\n  \"administrador\": \"true\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://serverest.dev/usuarios",
+					"protocol": "https",
+					"host": [
+						"serverest",
+						"dev"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar usuário por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains the correct user\", function () {\r",
+							"  const jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData._id).to.eql(pm.collectionVariables.get(\"userId\"));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://serverest.dev/usuarios/{{userId}}",
+					"protocol": "https",
+					"host": [
+						"serverest",
+						"dev"
+					],
+					"path": [
+						"usuarios",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Editar usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User is updated\", function () {\r",
+							"  const jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"Registro alterado com sucesso\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"Usuario Atualizado\",\r\n  \"email\": \"email_unico@example.com\",\r\n  \"password\": \"novaSenha123\",\r\n  \"administrador\": \"false\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://serverest.dev/usuarios/{{userId}}",
+					"protocol": "https",
+					"host": [
+						"serverest",
+						"dev"
+					],
+					"path": [
+						"usuarios",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Excluir usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User is deleted\", function () {\r",
+							"  const jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"Registro excluído com sucesso\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://serverest.dev/usuarios/{{userId}}",
+					"protocol": "https",
+					"host": [
+						"serverest",
+						"dev"
+					],
+					"path": [
+						"usuarios",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "userId",
+			"value": ""
+		}
+	]
+}
